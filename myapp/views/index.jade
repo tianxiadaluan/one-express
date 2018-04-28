@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  div #{ccc}
+  if (articleList.length)
+  .list-group
+    each val, key in articleList
+      a.list-group-item(href='/a/'+val.code) #{val.title}
+  if (categoryList.length)
+  .category
+    each val, key in categoryList
+      a(href='/c/'+val.id) 
+        span.label.label-primary #{val.name}
