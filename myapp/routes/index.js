@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mysql      = require('mysql');
 var markdown = require('markdown').markdown;
+var html2jade = require('html2jade');
 
 var connection = mysql.createConnection({
   host     : 'localhost',
@@ -39,6 +40,12 @@ router.get('/a/:code', function (req, res,next) {
   var code = req.params.code;
   connection.query(sqlArticleDetail, [code], function (error, results) {
     if (error) throw error;
+    res.setHeader('Content-Type', 'text/html');
+    results[0]['contentHtml'] = markdown.toHTML(results[0]['content']);
+
+    // html2jade.convertHtml(results[0]['contentHtml'], {}, function (err, jade) {
+    //   results[0]['contentHtml']  = jade;
+    // });
     res.render('article', { title: results[0].title , data: results[0]});
   });
 });
